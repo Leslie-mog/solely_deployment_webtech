@@ -15,7 +15,7 @@ function getImageUrl($path)
     if (strpos($path, 'http') === 0)
         return $path;
     // If it's just a filename from our 'uploads' bucket
-    return "https://qqwwtartsqtxyoirsiio.supabase.co/storage/v1/object/public/uploads/" . ltrim($path, '/');
+    return "https://qqwwtartsqtxyoirsiio.supabase.co/storage/v1/object/public/" . ltrim($path, '/');
 }
 ?>
 <!DOCTYPE html>
