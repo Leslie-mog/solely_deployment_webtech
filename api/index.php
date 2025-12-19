@@ -22,7 +22,7 @@ if ($category) {
 if ($search) {
     // The '*' acts as a wildcard (matches text before or after)
     // the "or" logic finds it in the TITLE or the SYNOPSIS
-    $term = $search; 
+    $term = $search;
     $pattern = "*$term*";
     $queryParams['or'] = "(title.ilike.$pattern,synopsis.ilike.$pattern)";
 }
@@ -31,7 +31,7 @@ try {
     // send request to Supabase
     $filmsRaw = $supabase->request('GET', 'films', $queryParams);
 
-    
+
     if (!is_array($filmsRaw)) {
         $filmsRaw = [];
     }
@@ -94,7 +94,7 @@ try {
                     class="btn btn-glass">Dashboard</a>
                 <a href="logout.php" class="btn btn-glass" style="text-decoration: none; font-size: 14px;">Sign Out</a>
             <?php else: ?>
-                <a href="login.php" class="btn btn-primary" style="text-decoration: none; font-size: 14px;">Sign In /
+                <a href="login.php?v=1" class="btn btn-primary" style="text-decoration: none; font-size: 14px;">Sign In /
                     Register</a>
             <?php endif; ?>
         </div>
@@ -111,13 +111,16 @@ try {
                         alt="Cover" style="opacity: 0; transition: opacity 1s;">
 
                     <!-- Video - Always show hero video as background -->
-                    <video id="hero-video" muted playsinline loop autoplay preload="auto" style="opacity: 1; transition: opacity 1s;" webkit-playsinline>
-                        <source src="https://qqwwtartsqtxyoirsiio.supabase.co/storage/v1/object/public/uploads/static_videos/thunderbolts_trailer.mp4" type="video/mp4">
+                    <video id="hero-video" muted playsinline loop autoplay preload="auto"
+                        style="opacity: 1; transition: opacity 1s;" webkit-playsinline>
+                        <source
+                            src="https://qqwwtartsqtxyoirsiio.supabase.co/storage/v1/object/public/uploads/static_videos/thunderbolts_trailer.mp4"
+                            type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
                     <script>
                         // Immediate attempt to play video
-                        (function() {
+                        (function () {
                             const video = document.getElementById('hero-video');
                             if (video) {
                                 video.muted = true;
@@ -166,18 +169,20 @@ try {
             <section class="hero">
                 <div class="hero-video-container">
                     <!-- Default Cover Image (Hidden, video plays immediately) -->
-                    <img id="hero-cover"
-                        src="assets/images/circles_cover.png"
-                        alt="Cover" style="opacity: 0; transition: opacity 1s;">
-                    
+                    <img id="hero-cover" src="assets/images/circles_cover.png" alt="Cover"
+                        style="opacity: 0; transition: opacity 1s;">
+
                     <!-- Default Video - Always playing -->
-                    <video id="hero-video" muted playsinline loop autoplay preload="auto" style="opacity: 1; transition: opacity 1s;" webkit-playsinline>
-                        <source src="https://qqwwtartsqtxyoirsiio.supabase.co/storage/v1/object/public/uploads/static_videos/thunderbolts_trailer.mp4" type="video/mp4">
+                    <video id="hero-video" muted playsinline loop autoplay preload="auto"
+                        style="opacity: 1; transition: opacity 1s;" webkit-playsinline>
+                        <source
+                            src="https://qqwwtartsqtxyoirsiio.supabase.co/storage/v1/object/public/uploads/static_videos/thunderbolts_trailer.mp4"
+                            type="video/mp4">
                         Your browser does not support the video tag.
                     </video>
                     <script>
                         // Immediate attempt to play video
-                        (function() {
+                        (function () {
                             const video = document.getElementById('hero-video');
                             if (video) {
                                 video.muted = true;
@@ -189,11 +194,13 @@ try {
                 </div>
                 <div class="hero-overlay"></div>
                 <div class="hero-content">
-                    <h1 style="font-size: 60px; font-weight: 200; line-height: 0.9; margin-bottom: 15px; text-transform: uppercase;">
+                    <h1
+                        style="font-size: 60px; font-weight: 200; line-height: 0.9; margin-bottom: 15px; text-transform: uppercase;">
                         Welcome to TetteyStudios+
                     </h1>
                     <div class="hero-meta">
-                        <span style="background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 4px; font-size: 11px;">TetteyStudios+</span>
+                        <span
+                            style="background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 4px; font-size: 11px;">TetteyStudios+</span>
                         <span>Independent Films</span>
                     </div>
                     <p class="hero-description">
@@ -229,7 +236,7 @@ try {
                         <div class="card-subtitle">TetteyStudios+ Original</div>
                     </div>
                 </div>
-                
+
                 <!-- Show approved films if available -->
                 <?php foreach ($films as $film): ?>
                     <div class="card" onclick="window.location.href='watch.php?id=<?= $film['id'] ?>'">
