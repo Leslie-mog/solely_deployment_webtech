@@ -141,6 +141,18 @@ function getEmbedUrl($url)
     return $url;
 }
 
+
+// Helper to resolve image paths
+function getImageUrl($path)
+{
+    if (empty($path))
+        return 'assets/images/circles_cover.png';
+    if (strpos($path, 'http') === 0)
+        return $path;
+    // If it's just a filename from our 'uploads' bucket
+    return "https://qqwwtartsqtxyoirsiio.supabase.co/storage/v1/object/public/uploads/" . ltrim($path, '/');
+}
+
 $embedUrl = getEmbedUrl($film['video_url']);
 $isExternalVideo = !empty($embedUrl) && (strpos($embedUrl, 'youtube.com/embed') !== false || strpos($embedUrl, 'vimeo.com/video') !== false || strpos($film['video_url'], 'http') === 0);
 
@@ -497,7 +509,7 @@ $isExternalVideo = !empty($embedUrl) && (strpos($embedUrl, 'youtube.com/embed') 
                 </iframe>
             <?php else: ?>
                 <!-- Native Video -->
-                <video controls autoplay poster="<?= htmlspecialchars($film['poster_url'] ?? '') ?>">
+                <video controls autoplay poster="<?= htmlspecialchars(getImageUrl($film['poster_url'])) ?>">
                     <?php if ($film['video_url']): ?>
                         <source src="<?= htmlspecialchars($film['video_url']) ?>" type="video/mp4">
                     <?php endif; ?>

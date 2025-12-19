@@ -53,6 +53,17 @@ try {
     $featuredFilm = null;
 
 }
+
+// Helper to resolve image paths
+function getImageUrl($path)
+{
+    if (empty($path))
+        return 'assets/images/circles_cover.png';
+    if (strpos($path, 'http') === 0)
+        return $path;
+    // If it's just a filename from our 'uploads' bucket
+    return "https://qqwwtartsqtxyoirsiio.supabase.co/storage/v1/object/public/uploads/" . ltrim($path, '/');
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -106,9 +117,8 @@ try {
         <?php if ($featuredFilm): ?>
             <section class="hero">
                 <div class="hero-video-container">
-                    <img id="hero-cover"
-                        src="<?= htmlspecialchars($featuredFilm['poster_url'] ?: 'assets/images/circles_cover.png') ?>"
-                        alt="Cover" style="opacity: 0; transition: opacity 1s;">
+                    <img id="hero-cover" src="<?= htmlspecialchars(getImageUrl($featuredFilm['poster_url'])) ?>" alt="Cover"
+                        style="opacity: 0; transition: opacity 1s;">
 
                     <!-- Video - Always show hero video as background -->
                     <video id="hero-video" muted playsinline loop autoplay preload="auto"
@@ -237,10 +247,9 @@ try {
                     </div>
                 </div>
 
-                <!-- Show approved films if available -->
                 <?php foreach ($films as $film): ?>
                     <div class="card" onclick="window.location.href='watch.php?id=<?= $film['id'] ?>'">
-                        <img src="<?= htmlspecialchars($film['thumbnail_url'] ?: $film['poster_url'] ?: 'assets/images/circles_cover.png') ?>"
+                        <img src="<?= htmlspecialchars(getImageUrl($film['thumbnail_url'] ?: $film['poster_url'])) ?>"
                             alt="<?= htmlspecialchars($film['title']) ?>" class="card-img">
                         <div class="card-overlay">
                             <div class="card-title"><?= htmlspecialchars($film['title']) ?></div>
@@ -266,7 +275,7 @@ try {
                 <?php if (!empty($films)): ?>
                     <?php foreach ($films as $film): ?>
                         <div class="card" onclick="window.location.href='watch.php?id=<?= $film['id'] ?>'">
-                            <img src="<?= htmlspecialchars($film['thumbnail_url'] ?: $film['poster_url'] ?: 'assets/images/circles_cover.png') ?>"
+                            <img src="<?= htmlspecialchars(getImageUrl($film['thumbnail_url'] ?: $film['poster_url'])) ?>"
                                 alt="<?= htmlspecialchars($film['title']) ?>" class="card-img">
                             <div class="card-overlay">
                                 <div class="card-title"><?= htmlspecialchars($film['title']) ?></div>

@@ -10,6 +10,17 @@ if ($_SESSION['role'] !== 'viewer' && $_SESSION['role'] !== 'admin') {
         exit;
     }
 }
+
+// Helper to resolve image paths
+function getImageUrl($path)
+{
+    if (empty($path))
+        return 'assets/images/circles_cover.png';
+    if (strpos($path, 'http') === 0)
+        return $path;
+    // If it's just a filename from our 'uploads' bucket
+    return "https://qqwwtartsqtxyoirsiio.supabase.co/storage/v1/object/public/uploads/" . ltrim($path, '/');
+}
 ?>
 
 <!DOCTYPE html>
@@ -123,8 +134,8 @@ if ($_SESSION['role'] !== 'viewer' && $_SESSION['role'] !== 'admin') {
                     </div>
                 </div>
                 <?php foreach (array_slice($films, 0, 5) as $film): ?>
-                        <div class="card" onclick="window.location.href='watch.php?id=<?= $film['id'] ?>'">
-                        <img src="<?= htmlspecialchars($film['poster_url'] ?: $film['thumbnail_url'] ?: 'assets/images/circles_cover.png') ?>"
+                    <div class="card" onclick="window.location.href='watch.php?id=<?= $film['id'] ?>'">
+                        <img src="<?= htmlspecialchars(getImageUrl($film['poster_url'] ?: $film['thumbnail_url'])) ?>"
                             class="card-img">
                         <div class="card-overlay">
                             <div class="card-title"><?= htmlspecialchars($film['title']) ?></div>
@@ -147,7 +158,7 @@ if ($_SESSION['role'] !== 'viewer' && $_SESSION['role'] !== 'admin') {
                 <?php if (!empty($films)): ?>
                     <?php foreach ($films as $film): ?>
                         <div class="card" onclick="window.location.href='watch.php?id=<?= $film['id'] ?>'">
-                            <img src="<?= htmlspecialchars($film['thumbnail_url'] ?: $film['poster_url'] ?: 'assets/images/circles_cover.png') ?>"
+                            <img src="<?= htmlspecialchars(getImageUrl($film['thumbnail_url'] ?: $film['poster_url'])) ?>"
                                 alt="<?= htmlspecialchars($film['title']) ?>" class="card-img">
                             <div class="card-overlay">
                                 <div class="card-title"><?= htmlspecialchars($film['title']) ?></div>
@@ -187,7 +198,7 @@ if ($_SESSION['role'] !== 'viewer' && $_SESSION['role'] !== 'admin') {
                 <div class="scroll-container">
                     <?php foreach ($myDonations as $d): ?>
                         <div class="card" onclick="window.location.href='watch.php?id=<?= $d['film_id'] ?>'">
-                            <img src="<?= htmlspecialchars($d['thumbnail']) ?>" class="card-img">
+                            <img src="<?= htmlspecialchars(getImageUrl($d['thumbnail'])) ?>" class="card-img">
                             <div class="card-overlay">
                                 <div class="card-title"><?= htmlspecialchars($d['title']) ?></div>
                                 <div class="card-subtitle">Donated $<?= number_format($d['amount'], 2) ?></div>
@@ -216,7 +227,7 @@ if ($_SESSION['role'] !== 'viewer' && $_SESSION['role'] !== 'admin') {
                 <div class="scroll-container">
                     <?php foreach ($history as $film): ?>
                         <div class="card" onclick="window.location.href='watch.php?id=<?= $film['id'] ?>'">
-                            <img src="<?= htmlspecialchars($film['thumbnail_url'] ?: $film['poster_url'] ?: 'assets/images/circles_cover.png') ?>"
+                            <img src="<?= htmlspecialchars(getImageUrl($film['thumbnail_url'] ?: $film['poster_url'])) ?>"
                                 class="card-img">
                             <div class="card-overlay">
                                 <div class="card-title"><?= htmlspecialchars($film['title']) ?></div>
