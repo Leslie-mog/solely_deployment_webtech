@@ -2,7 +2,7 @@
 require_once __DIR__ . '/../src/auth.php';
 
 if (isLoggedIn()) {
-    header('Location: index.php');
+    header('Location: /');
     exit;
 }
 
@@ -23,7 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($result['success']) {
             $success = $result['message'];
             // Auto login or redirect to login
-            header('refresh:2;url=login.php');
+            header('refresh:2;url=/login');
         } else {
             $error = $result['message'];
         }
@@ -61,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             <?php endif; ?>
 
-            <form method="POST" action="signup.php">
+            <form method="POST" action="/signup">
                 <div class="form-group">
                     <label class="form-label" for="username">Username</label>
                     <input type="text" id="username" name="username" class="form-input" required

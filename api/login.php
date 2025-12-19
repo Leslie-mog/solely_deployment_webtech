@@ -19,13 +19,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $result = login($username, $password);
         if ($result['success']) {
+            session_write_close(); // Ensure session is written to Supabase before redirect
             $role = $_SESSION['role'] ?? 'viewer';
             if ($role === 'filmmaker') {
-                header('Location: filmmaker_dashboard.php');
+                header('Location: /filmmaker_dashboard');
             } elseif ($role === 'admin') {
-                header('Location: admin_dashboard.php');
+                header('Location: /admin_dashboard');
             } else {
-                header('Location: viewer_dashboard.php');
+                header('Location: /viewer_dashboard');
             }
             exit;
         } else {
@@ -58,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             <?php endif; ?>
 
-            <form method="POST" action="login.php">
+            <form method="POST" action="/login">
                 <div class="form-group">
                     <label class="form-label" for="username">Username</label>
                     <input type="text" id="username" name="username" class="form-input" required
