@@ -1,9 +1,10 @@
 <?php
-// Only use custom session directory for local XAMPP/Dev (not Vercel)
-if (!getenv('VERCEL')) {
-    $sessionDir = __DIR__ . '/../sessions';
+// Only use custom session directory if we have write permissions to the project root
+// This works for local XAMPP (writable) and Vercel (read-only)
+$projectRoot = dirname(__DIR__);
+if (is_writable($projectRoot)) {
+    $sessionDir = $projectRoot . '/sessions';
     if (!is_dir($sessionDir)) {
-        // Suppress warnings if we can't create it (e.g. permission denied)
         @mkdir($sessionDir, 0777, true);
     }
     if (is_dir($sessionDir) && is_writable($sessionDir)) {
