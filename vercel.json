@@ -8,43 +8,43 @@
     "rewrites": [
         {
             "source": "/",
-            "dest": "/api/index.php"
+            "destination": "/api/index.php"
         },
         {
             "source": "/login",
-            "dest": "/api/login.php"
+            "destination": "/api/login.php"
         },
         {
             "source": "/signup",
-            "dest": "/api/signup.php"
+            "destination": "/api/signup.php"
         },
         {
             "source": "/logout",
-            "dest": "/api/logout.php"
+            "destination": "/api/logout.php"
         },
         {
             "source": "/viewer_dashboard",
-            "dest": "/api/viewer_dashboard.php"
+            "destination": "/api/viewer_dashboard.php"
         },
         {
             "source": "/filmmaker_dashboard",
-            "dest": "/api/filmmaker_dashboard.php"
+            "destination": "/api/filmmaker_dashboard.php"
         },
         {
             "source": "/admin_dashboard",
-            "dest": "/api/admin_dashboard.php"
+            "destination": "/api/admin_dashboard.php"
         },
         {
             "source": "/watch",
-            "dest": "/api/watch.php"
+            "destination": "/api/watch.php"
         },
         {
             "source": "/upload_film",
-            "dest": "/api/upload_film.php"
+            "destination": "/api/upload_film.php"
         },
         {
             "source": "/((?!css|js|assets|uploads|api|favicon.ico).*)",
-            "dest": "/api/$1.php"
+            "destination": "/api/$1.php"
         }
     ],
     "headers": [
