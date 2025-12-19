@@ -1,9 +1,15 @@
 <?php
-$sessionDir = __DIR__ . '/../sessions';
-if (!is_dir($sessionDir)) {
-    mkdir($sessionDir, 0777, true);
+// Only use custom session directory for local XAMPP/Dev (not Vercel)
+if (!getenv('VERCEL')) {
+    $sessionDir = __DIR__ . '/../sessions';
+    if (!is_dir($sessionDir)) {
+        // Suppress warnings if we can't create it (e.g. permission denied)
+        @mkdir($sessionDir, 0777, true);
+    }
+    if (is_dir($sessionDir) && is_writable($sessionDir)) {
+        session_save_path($sessionDir);
+    }
 }
-session_save_path($sessionDir);
 session_start();
 // Using absolute path for db.php relative to this file to be safe
 require_once __DIR__ . '/db.php';
@@ -42,7 +48,7 @@ function register($username, $email, $password, $role)
             'username' => $username,
             'email' => $email,
             'password_hash' => $hash
-        ]); 
+        ]);
 
         if (empty($users) || !isset($users[0]['id'])) {
             throw new Exception("Failed to create user record.");
@@ -58,7 +64,7 @@ function register($username, $email, $password, $role)
 
         return ['success' => true, 'message' => 'Registration successful!'];
     } catch (Exception $e) {
-    
+
         $msg = $e->getMessage();
         if (strpos($msg, 'users_username_key') !== false || strpos($msg, 'username') !== false) {
             return ['success' => false, 'message' => 'Username already taken'];
@@ -91,7 +97,7 @@ function login($username, $password)
 
                 // Handle joined data
                 $profile = $user['user_profiles'] ?? [];
-            
+
                 if (isset($profile[0])) {
                     $profile = $profile[0];
                 }
@@ -102,7 +108,7 @@ function login($username, $password)
             }
         }
     } catch (Exception $e) {
-        
+
     }
 
     return ['success' => false, 'message' => 'Invalid credentials'];
