@@ -47,13 +47,23 @@ class SupabaseSessionHandler implements SessionHandlerInterface
     {
         try {
             $expires_at = date('c', time() + (int) ini_get('session.gc_maxlifetime'));
+
+            // Delete existing session first to avoid primary key conflicts
+            try {
+                $this->supabase->request('DELETE', $this->table . "?id=eq.$id");
+            } catch (Exception $e) {
+                // Ignore if session doesn't exist
+            }
+
+            // Insert new session
             $this->supabase->request('POST', $this->table, [
                 'id' => $id,
                 'data' => $data,
                 'expires_at' => $expires_at
-            ], ['Prefer: resolution=merge-duplicates']); // UPSERT behavior
+            ]);
             return true;
         } catch (Exception $e) {
+            error_log("Session write failed: " . $e->getMessage());
             return false;
         }
     }

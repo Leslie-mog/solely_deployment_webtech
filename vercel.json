@@ -4,6 +4,20 @@
             "runtime": "vercel-php@0.7.1"
         }
     },
+    "routes": [
+        {
+            "src": "/uploads/(.*)",
+            "dest": "/public/uploads/$1"
+        },
+        {
+            "src": "/assets/(.*)",
+            "dest": "/public/assets/$1"
+        },
+        {
+            "src": "/(css|js)/(.*)",
+            "dest": "/public/$1/$2"
+        }
+    ],
     "cleanUrls": true,
     "rewrites": [
         {
