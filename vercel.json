@@ -7,44 +7,8 @@
     "cleanUrls": true,
     "rewrites": [
         {
-            "source": "/",
-            "destination": "/api/index.php"
-        },
-        {
-            "source": "/login",
-            "destination": "/api/login.php"
-        },
-        {
-            "source": "/signup",
-            "destination": "/api/signup.php"
-        },
-        {
-            "source": "/logout",
-            "destination": "/api/logout.php"
-        },
-        {
-            "source": "/viewer_dashboard",
-            "destination": "/api/viewer_dashboard.php"
-        },
-        {
-            "source": "/filmmaker_dashboard",
-            "destination": "/api/filmmaker_dashboard.php"
-        },
-        {
-            "source": "/admin_dashboard",
-            "destination": "/api/admin_dashboard.php"
-        },
-        {
-            "source": "/watch",
-            "destination": "/api/watch.php"
-        },
-        {
-            "source": "/upload_film",
-            "destination": "/api/upload_film.php"
-        },
-        {
-            "source": "/((?!css|js|assets|uploads|api|favicon.ico).*)",
-            "destination": "/api/$1.php"
+            "source": "/((?!uploads|assets|css|js|favicon.ico).*)",
+            "destination": "/api/$1"
         }
     ],
     "headers": [
