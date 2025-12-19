@@ -1,0 +1,9 @@
+
+.git
+.vercel
+sessions
+public/uploads
+*.sqlite
+**/*.mp4
+storage
+internal
