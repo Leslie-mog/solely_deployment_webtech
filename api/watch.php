@@ -104,6 +104,20 @@ if (count($filmReviews) > 0) {
 // Fetch Cast/Crew (Credits)
 $filmCredits = $supabase->request('GET', 'film_credits', ['film_id' => "eq.$filmId"]);
 
+// Fetch Recent Donors
+$donationsRaw = $supabase->request('GET', 'donations', [
+    'film_id' => "eq.$filmId",
+    'select' => 'amount,users(username)',
+    'order' => 'created_at.desc',
+    'limit' => 5
+]);
+
+$recentDonors = array_map(function ($d) {
+    // Check if users relation exists and is not null
+    $d['username'] = isset($d['users']['username']) ? $d['users']['username'] : 'Anonymous';
+    return $d;
+}, $donationsRaw ?? []);
+
 // Function to convert video URLs to embeddable format
 function getEmbedUrl($url)
 {
@@ -206,9 +220,7 @@ $isExternalVideo = !empty($embedUrl) && (strpos($embedUrl, 'youtube.com/embed') 
             object-fit: contain;
         }
 
-        iframe {
-           
-        }
+        iframe {}
 
         /* Content Layout */
         .film-content {
@@ -472,7 +484,7 @@ $isExternalVideo = !empty($embedUrl) && (strpos($embedUrl, 'youtube.com/embed') 
     <div class="player-container">
         <div class="video-wrapper">
             <?php if ($isExternalVideo && $embedUrl): ?>
-    
+
                 <iframe class="video-embed" src="<?= htmlspecialchars($embedUrl) ?>?autoplay=1&modestbranding=1&rel=0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     allowfullscreen>
