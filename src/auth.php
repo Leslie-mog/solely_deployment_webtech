@@ -36,9 +36,12 @@ class SupabaseSessionHandler implements SessionHandlerInterface
                 'select' => 'data,expires_at'
             ]);
             if (!empty($resp) && strtotime($resp[0]['expires_at']) > time()) {
+                error_log("Session read SUCCESS for ID: $id");
                 return $resp[0]['data'];
             }
+            error_log("Session read EMPTY/EXPIRED for ID: $id");
         } catch (Exception $e) {
+            error_log("Session read ERROR for ID $id: " . $e->getMessage());
         }
         return '';
     }
@@ -71,9 +74,11 @@ class SupabaseSessionHandler implements SessionHandlerInterface
     public function destroy($id): bool
     {
         try {
+            error_log("Session destroy for ID: $id");
             $this->supabase->request('DELETE', $this->table . "?id=eq.$id");
             return true;
         } catch (Exception $e) {
+            error_log("Session destroy ERROR: " . $e->getMessage());
             return false;
         }
     }
