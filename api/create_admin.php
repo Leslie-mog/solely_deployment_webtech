@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/src/Supabase.php';
+require_once __DIR__ . '/../src/Supabase.php';
 
 // Config
 $supabaseUrl = 'https://qqwwtartsqtxyoirsiio.supabase.co';
