@@ -1,28 +1,92 @@
 <?php
 ob_start();
 
-// Handle sessions for different environments
-if (getenv('VERCEL')) {
-    // On Vercel, the only writable directory is /tmp
-    session_save_path('/tmp');
-} else {
-    // On local XAMPP/Dev
-    $projectRoot = dirname(__DIR__);
-    $sessionDir = $projectRoot . '/sessions';
-    if (!is_dir($sessionDir)) {
-        @mkdir($sessionDir, 0777, true);
+// Using absolute path for db.php relative to this file to be safe
+require_once __DIR__ . '/db.php';
+
+/**
+ * Custom Session Handler for Supabase
+ * Ensures sessions persist across Vercel's ephemeral lambdas
+ */
+class SupabaseSessionHandler implements SessionHandlerInterface
+{
+    private $supabase;
+    private $table = 'sessions';
+
+    public function __construct()
+    {
+        global $supabase;
+        $this->supabase = $supabase;
     }
-    if (is_writable($sessionDir)) {
-        session_save_path($sessionDir);
+
+    public function open($savePath, $sessionName): bool
+    {
+        return true;
+    }
+    public function close(): bool
+    {
+        return true;
+    }
+
+    public function read($id): string
+    {
+        try {
+            $resp = $this->supabase->request('GET', $this->table, [
+                'id' => "eq.$id",
+                'select' => 'data,expires_at'
+            ]);
+            if (!empty($resp) && strtotime($resp[0]['expires_at']) > time()) {
+                return $resp[0]['data'];
+            }
+        } catch (Exception $e) {
+        }
+        return '';
+    }
+
+    public function write($id, $data): bool
+    {
+        try {
+            $expires_at = date('c', time() + (int) ini_get('session.gc_maxlifetime'));
+            $this->supabase->request('POST', $this->table, [
+                'id' => $id,
+                'data' => $data,
+                'expires_at' => $expires_at
+            ], ['Prefer: resolution=merge-duplicates']); // UPSERT behavior
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    public function destroy($id): bool
+    {
+        try {
+            $this->supabase->request('DELETE', $this->table . "?id=eq.$id");
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
+    }
+
+    public function gc($maxlifetime): int|false
+    {
+        try {
+            // Simple GC: delete expired sessions
+            $now = date('c');
+            $this->supabase->request('DELETE', $this->table . "?expires_at=lt.$now");
+            return true;
+        } catch (Exception $e) {
+            return false;
+        }
     }
 }
 
 if (session_status() === PHP_SESSION_NONE) {
+    if (getenv('VERCEL') || true) { // Defaulting to Supabase session for all for consistency
+        session_set_save_handler(new SupabaseSessionHandler(), true);
+    }
     session_start();
 }
-
-// Using absolute path for db.php relative to this file to be safe
-require_once __DIR__ . '/db.php';
 
 function isLoggedIn()
 {

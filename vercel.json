@@ -7,15 +7,11 @@
     "cleanUrls": true,
     "rewrites": [
         {
-            "source": "/(css|js|assets|uploads)/(.*)",
-            "dest": "/public/$1/$2"
-        },
-        {
             "source": "/",
             "dest": "/api/index.php"
         },
         {
-            "source": "/(.*)",
+            "source": "/((?!css|js|assets|uploads|api|favicon.ico).*)",
             "dest": "/api/$1"
         }
     ],
