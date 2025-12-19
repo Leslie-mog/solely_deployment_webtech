@@ -1,17 +1,26 @@
 <?php
-// Only use custom session directory if we have write permissions to the project root
-// This works for local XAMPP (writable) and Vercel (read-only)
-$projectRoot = dirname(__DIR__);
-if (is_writable($projectRoot)) {
+ob_start();
+
+// Handle sessions for different environments
+if (getenv('VERCEL')) {
+    // On Vercel, the only writable directory is /tmp
+    session_save_path('/tmp');
+} else {
+    // On local XAMPP/Dev
+    $projectRoot = dirname(__DIR__);
     $sessionDir = $projectRoot . '/sessions';
     if (!is_dir($sessionDir)) {
         @mkdir($sessionDir, 0777, true);
     }
-    if (is_dir($sessionDir) && is_writable($sessionDir)) {
+    if (is_writable($sessionDir)) {
         session_save_path($sessionDir);
     }
 }
-session_start();
+
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 // Using absolute path for db.php relative to this file to be safe
 require_once __DIR__ . '/db.php';
 
