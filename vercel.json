@@ -11,8 +11,40 @@
             "dest": "/api/index.php"
         },
         {
+            "source": "/login",
+            "dest": "/api/login.php"
+        },
+        {
+            "source": "/signup",
+            "dest": "/api/signup.php"
+        },
+        {
+            "source": "/logout",
+            "dest": "/api/logout.php"
+        },
+        {
+            "source": "/viewer_dashboard",
+            "dest": "/api/viewer_dashboard.php"
+        },
+        {
+            "source": "/filmmaker_dashboard",
+            "dest": "/api/filmmaker_dashboard.php"
+        },
+        {
+            "source": "/admin_dashboard",
+            "dest": "/api/admin_dashboard.php"
+        },
+        {
+            "source": "/watch",
+            "dest": "/api/watch.php"
+        },
+        {
+            "source": "/upload_film",
+            "dest": "/api/upload_film.php"
+        },
+        {
             "source": "/((?!css|js|assets|uploads|api|favicon.ico).*)",
-            "dest": "/api/$1"
+            "dest": "/api/$1.php"
         }
     ],
     "headers": [
